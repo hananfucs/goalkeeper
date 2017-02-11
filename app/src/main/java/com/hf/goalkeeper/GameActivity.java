@@ -1,6 +1,7 @@
 package com.hf.goalkeeper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +15,7 @@ import android.widget.Toast;
  * Created by hanan on 05/02/17.
  */
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements GameContract.ViewHandler{
     private EditText mGameMinTimeText;
     private EditText mGameSecTimeText;
     private EditText mExtMinTimeText;
@@ -29,6 +30,8 @@ public class GameActivity extends AppCompatActivity {
     private TeamListAdapter mWhiteAdapter;
     private Mapper mMapper;
     private PlayerManager mPlayerManager;
+
+    private GameContract.UserActionsListener mActionsListener;
 
     private Context mContext;
 
@@ -88,8 +91,24 @@ public class GameActivity extends AppCompatActivity {
         //update lists and their status
         //start clock
         //adjust layout
+        int gameMinutes = Integer.valueOf(mGameMinTimeText.getText().toString());
+        int gameSeconds= Integer.valueOf(mGameSecTimeText.getText().toString());
+        int extMinutes = Integer.valueOf(mExtMinTimeText.getText().toString());
+        int extSeconds = Integer.valueOf(mExtSecTimeText.getText().toString());
+        mActionsListener = new TimeManager(this);
+        mActionsListener.userStartedGame(gameMinutes, gameSeconds, extMinutes, extSeconds);
+
         mStartButton.setText("Pause");
     }
 
 
+    @Override
+    public void updateMatchTime(int minutes, int seconds) {
+
+    }
+
+    @Override
+    public void updateExtTime(int minutes, int seconds) {
+
+    }
 }

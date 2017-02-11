@@ -7,8 +7,8 @@
     android:layout_height="match_parent">
 
     <android.support.constraint.Guideline
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/guideline"
         android:orientation="vertical"
         tools:layout_editor_absoluteY="0dp"
@@ -182,8 +182,6 @@
         android:layout_width="175dp"
         android:id="@+id/whiteTeamList"
         android:layout_marginTop="40dp"
-        app:layout_constraintHorizontal_bias="0.66"
-        tools:layout_editor_absoluteY="361dp"
-        tools:layout_editor_absoluteX="227dp" />
+        app:layout_constraintHorizontal_bias="0.66" />
 
 </android.support.constraint.ConstraintLayout>
