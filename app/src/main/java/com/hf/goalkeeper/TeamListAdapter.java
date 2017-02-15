@@ -40,6 +40,7 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.ViewHo
             holder.setPlayer(mManager.getPlayerByLocation(position));
             holder.mTextView.setText(mManager.getPlayerByLocation(position).name);
             holder.mCheckbox.setChecked(mManager.isPlayerInTeam(mManager.getPlayerByLocation(position), mTeam));
+            holder.mCheckbox.setVisibility(View.VISIBLE);
         } else {
             holder.setPlayer(mMatchTeam.get(position));
             holder.mTextView.setText(mMatchTeam.get(position).name);
@@ -57,6 +58,11 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.ViewHo
     public void displayMatchTeams() {
         mMatchTeam = mManager.getTeam(mTeam);
         inMatch = true;
+        notifyDataSetChanged();
+    }
+
+    public void displayAllPlayers() {
+        inMatch = false;
         notifyDataSetChanged();
     }
 
