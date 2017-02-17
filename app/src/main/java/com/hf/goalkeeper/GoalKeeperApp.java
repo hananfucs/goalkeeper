@@ -20,6 +20,9 @@ public class GoalKeeperApp extends Application {
 
         PlayerManager playerManager = new PlayerManager();
         mMapper.setValueForKey(PlayerManager.class, playerManager);
+
+        StatisticsManager statisticsManager = new StatisticsManager();
+        mMapper.setValueForKey(StatisticsManager.class, statisticsManager);
     }
 
     public Mapper getMapper() {
