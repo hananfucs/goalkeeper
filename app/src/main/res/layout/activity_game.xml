@@ -35,7 +35,10 @@
         app:layout_constraintHorizontal_bias="0.58" />
 
     <Button
+        style="@style/Button"
+        android:textColor="@color/colorPrimary"
         android:text="Start"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/startButton"
@@ -47,17 +50,17 @@
         android:layout_marginBottom="16dp" />
 
     <TextView
-        android:text="Game Time:"
+        android:text="Extension:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/extTimeTitle"
         app:layout_constraintRight_toLeftOf="@+id/editTimeLayout"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintTop_toBottomOf="@+id/matchTimeTitle"
         android:layout_marginEnd="8dp" />
 
     <TextView
-        android:text="Extension:"
+        android:text="Game Time:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/matchTimeTitle"
@@ -76,7 +79,8 @@
         android:id="@+id/editTimeLayout"
         app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
+    <TextView
+        android:textSize="30sp"
         android:selectAllOnFocus="true"
         android:maxLength="2"
         android:text="00"
@@ -91,7 +95,8 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginEnd="5dp" />
 
-    <EditText
+    <TextView
+        android:textSize="30sp"
         android:selectAllOnFocus="true"
         android:maxLength="2"
         android:text="00"
@@ -107,7 +112,8 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginEnd="5dp" />
 
-    <EditText
+    <TextView
+        android:textSize="30sp"
         android:selectAllOnFocus="true"
         android:maxLength="2"
         android:text="08"
@@ -124,7 +130,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="10dp" />
 
-    <EditText
+    <TextView
+        android:textSize="30sp"
         android:selectAllOnFocus="true"
         android:maxLength="2"
         android:text="02"
@@ -142,6 +149,7 @@
         android:layout_marginStart="5dp" />
 
         <TextView
+            android:textSize="30sp"
             android:text=":"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -151,6 +159,7 @@
             app:layout_constraintRight_toLeftOf="@+id/gameTimeSecEditText" />
 
         <TextView
+            android:textSize="30sp"
             android:text=":"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -171,5 +180,16 @@
         android:id="@+id/whiteTeamList"
         android:layout_marginTop="40dp"
         app:layout_constraintHorizontal_bias="0.66" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        android:id="@+id/edit_settings_button"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="15dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintLeft_toRightOf="@+id/editTimeLayout" />
 
 </android.support.constraint.ConstraintLayout>

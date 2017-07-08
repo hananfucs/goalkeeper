@@ -3,17 +3,17 @@
     package="com.hf.goalkeeper">
 
     <application
-        android:name=".GoalKeeperApp"
+        android:name=".core.GoalKeeperApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PlayersListActivity"/>
+        <activity android:name=".viewes.activities.PlayersListActivity"/>
 
 
 
-        <activity android:name=".GameActivity">
+        <activity android:name=".viewes.activities.GameActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".GamePlayActivity"/>
+        <activity android:name=".viewes.activities.GamePlayActivity"/>
+        <activity android:name=".viewes.activities.GameSettingsActivity" android:exported="true"/>
 
     </application>
 

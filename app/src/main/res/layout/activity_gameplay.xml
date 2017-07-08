@@ -74,6 +74,7 @@
 
 
     <Button
+        style="@style/Button"
         android:visibility="visible"
         android:text="Stop"
         android:layout_width="wrap_content"
@@ -85,6 +86,7 @@
         android:layout_marginBottom="16dp" />
 
     <Button
+        style="@style/Button"
         android:visibility="visible"
         android:text="Resume"
         android:layout_width="wrap_content"
@@ -98,18 +100,19 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/blackScorrers"
         android:layout_width="175dp"
-        android:layout_height="50dp"
-        app:layout_constraintTop_toBottomOf="@id/blackTeamList"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@+id/blackTeamList"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/whiteScorrers"
         android:layout_width="175dp"
-        android:layout_height="50dp"
-        app:layout_constraintTop_toBottomOf="@id/whiteTeamList"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@+id/whiteTeamList"
         app:layout_constraintRight_toRightOf="parent" />
 
     <Button
+        style="@style/Button"
         android:text="PAUSE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

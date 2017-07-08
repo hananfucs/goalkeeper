@@ -1,4 +1,4 @@
-package com.hf.goalkeeper;
+package com.hf.goalkeeper.core;
 
 import java.util.HashMap;
 import java.util.Objects;

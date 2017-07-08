@@ -1,4 +1,4 @@
-package com.hf.goalkeeper;
+package com.hf.goalkeeper.core.managers;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,11 @@ import java.util.ArrayList;
 public class StatisticsManager {
     private ArrayList<Goal> currentWhiteGoals = new ArrayList<>();
     private ArrayList<Goal> currentBlackGoals = new ArrayList<>();
+    private TimeManager mTimeManager;
+
+    public void setTimeManager(TimeManager timeManager) {
+        mTimeManager = timeManager;
+    }
 
     public ArrayList<Goal> getBlackGoals() {
         return currentBlackGoals;
@@ -18,16 +23,26 @@ public class StatisticsManager {
         return currentWhiteGoals;
     }
 
-    public void goalScored(int team, PlayerManager.Player player, int minutes, int seconds) {
+    public void goalScored(int team, PlayerManager.Player player) {
         Goal goal = new Goal();
-        goal.minute = minutes;
-        goal.second = seconds;
+        goal.minute = mTimeManager.getCurrentMinute();
+        goal.second = mTimeManager.getCurrentSecond();
+        goal.isExtension = mTimeManager.isInExt();
         goal.scorrer = player;
 
         if (team == PlayerManager.BLACK_TEAM)
             currentBlackGoals.add(goal);
         else if (team == PlayerManager.WHITE_TEAM)
             currentWhiteGoals.add(goal);
+        mTimeManager.goalScored(goal);
+    }
+
+    public void cancelGoal(int position, int team) {
+        if (team == PlayerManager.WHITE_TEAM)
+            currentWhiteGoals.remove(position);
+        if (team == PlayerManager.BLACK_TEAM)
+            currentBlackGoals.remove(position);
+
     }
 
     public ArrayList<Goal> getGoals(int mTeam) {
@@ -37,10 +52,16 @@ public class StatisticsManager {
             return currentWhiteGoals;
     }
 
+    public void resetMatchGoals() {
+        currentWhiteGoals.clear();
+        currentBlackGoals.clear();
+    }
+
     public static class Goal {
         public int minute;
         public int second;
         public PlayerManager.Player scorrer;
+        public boolean isExtension;
     }
 
     public class Match {

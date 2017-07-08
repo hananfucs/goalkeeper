@@ -1,4 +1,6 @@
-package com.hf.goalkeeper;
+package com.hf.goalkeeper.viewes.support;
+
+import com.hf.goalkeeper.core.managers.StatisticsManager;
 
 /**
  * Created by hanan on 11/02/17.
@@ -13,6 +15,8 @@ public interface GameContract {
         void matchStarted();
         void matchPaused();
         void matchEnded();
+
+        void goalScored(StatisticsManager.Goal goal);
     }
 
     interface UserActionsListener {

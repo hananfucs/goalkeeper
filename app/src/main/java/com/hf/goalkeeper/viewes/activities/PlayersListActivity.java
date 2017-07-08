@@ -1,4 +1,4 @@
-package com.hf.goalkeeper;
+package com.hf.goalkeeper.viewes.activities;
 
 import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +10,13 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+
+import com.hf.goalkeeper.viewes.adapters.PlayerAdapter;
+import com.hf.goalkeeper.viewes.support.PlayerListContract;
+import com.hf.goalkeeper.R;
+import com.hf.goalkeeper.core.GoalKeeperApp;
+import com.hf.goalkeeper.core.Mapper;
+import com.hf.goalkeeper.core.managers.PlayerManager;
 
 public class PlayersListActivity extends AppCompatActivity  implements PlayerListContract.ViewHandler {
 

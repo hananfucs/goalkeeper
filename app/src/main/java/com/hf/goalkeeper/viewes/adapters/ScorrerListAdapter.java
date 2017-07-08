@@ -1,11 +1,14 @@
-package com.hf.goalkeeper;
+package com.hf.goalkeeper.viewes.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.hf.goalkeeper.R;
+import com.hf.goalkeeper.core.managers.StatisticsManager;
 
 /**
  * Created by hanan on 15/02/17.
@@ -31,10 +34,28 @@ public class ScorrerListAdapter extends RecyclerView.Adapter<ScorrerListAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         StatisticsManager.Goal goal = mStatsManager.getGoals(mTeam).get(position);
         holder.mTextView.setText(getGoalTest(goal));
+        holder.mCancelButton.setOnClickListener(getCancelGoalListener(holder.getLayoutPosition()));
     }
 
     private String getGoalTest(StatisticsManager.Goal goal) {
-        return goal.scorrer.name + " (" + goal.minute + ":" + goal.second + ")";
+        String goalMinute = String.valueOf(goal.minute);
+        if (goalMinute.length() == 1)
+            goalMinute = "0" + goalMinute;
+
+        String goalSecond = String.valueOf(goal.second);
+        if (goalSecond.length() == 1)
+            goalSecond = "0" + goalSecond;
+        return goal.scorrer.name + " (" + goalMinute + ":" + goalSecond+ ")";
+    }
+
+    private View.OnClickListener getCancelGoalListener(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mStatsManager.cancelGoal(position, mTeam);
+                notifyDataSetChanged();
+            }
+        };
     }
 
     @Override
@@ -45,9 +66,11 @@ public class ScorrerListAdapter extends RecyclerView.Adapter<ScorrerListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mTextView;
+        public ImageView mCancelButton;
         public ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.player_name_text);
+            mTextView = (TextView) v.findViewById(R.id.scorrerText);
+            mCancelButton = (ImageView) v.findViewById(R.id.cancel_goal);
         }
     }
 

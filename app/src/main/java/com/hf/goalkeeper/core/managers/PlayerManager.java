@@ -1,6 +1,4 @@
-package com.hf.goalkeeper;
-
-import android.util.Log;
+package com.hf.goalkeeper.core.managers;
 
 import java.util.ArrayList;
 

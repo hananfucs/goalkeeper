@@ -1,16 +1,23 @@
-package com.hf.goalkeeper;
+package com.hf.goalkeeper.core.managers;
 
 import android.util.Log;
+
+import com.hf.goalkeeper.viewes.support.GameContract;
 
 /**
  * Created by hanan on 11/02/17.
  */
 
-public class TimeManager implements GameContract.UserActionsListener{
+public class TimeManager implements GameContract.UserActionsListener {
     public static final int GAME_NOT_STARTED = 0;
     public static final int GAME_ONGOING = 1;
     public static final int GAME_IN_EXTENSION = 2;
     public static final int GAME_PAUSED= 3;
+
+    private int mMatchMinutes;
+    private int mMatchSeconds;
+    private int mExtMinutes;
+    private int mExtSeconds;
 
     private GameContract.ViewHandler mViewHandler;
     private int mGameState;
@@ -29,6 +36,12 @@ public class TimeManager implements GameContract.UserActionsListener{
     public void userStartedGame(int gameMinutes, int gameSeconds, int extMinutes, int extSeconds) {
         mViewHandler.matchStarted();
         mViewHandler.updateMatchTime(gameMinutes, gameSeconds);
+
+        mMatchMinutes = gameMinutes;
+        mMatchSeconds= gameSeconds;
+        mExtMinutes = extMinutes;
+        mExtSeconds = extSeconds;
+
         currentGameThread = new TimerThread(gameMinutes, gameSeconds);
         currentGameThread.start();
         mGameState = GAME_ONGOING;
@@ -58,6 +71,22 @@ public class TimeManager implements GameContract.UserActionsListener{
         mGameState = GAME_NOT_STARTED;
     }
 
+    public int getCurrentMinute() {
+        return currentGameThread.getMinute();
+    }
+
+    public int getCurrentSecond() {
+        return currentGameThread.getSecond();
+    }
+
+    public boolean isInExt() {
+        return false;
+    }
+
+    public void goalScored(StatisticsManager.Goal goal) {
+        mViewHandler.goalScored(goal);
+    }
+
     private class TimerThread extends Thread{
         private int mSeconds;
         private int mMinutes;
@@ -68,6 +97,14 @@ public class TimeManager implements GameContract.UserActionsListener{
             mMinutes = minutes;
             mSeconds = seconds;
             mOngoing = true;
+        }
+
+        public int getSecond() {
+            return 60 - mSeconds;
+        }
+
+        public int getMinute() {
+            return mMatchMinutes - (mMinutes + 1);
         }
 
         public void pauseTime() {

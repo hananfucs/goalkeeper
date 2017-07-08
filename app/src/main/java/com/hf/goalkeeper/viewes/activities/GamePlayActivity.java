@@ -1,4 +1,4 @@
-package com.hf.goalkeeper;
+package com.hf.goalkeeper.viewes.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +10,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.hf.goalkeeper.viewes.support.GameContract;
+import com.hf.goalkeeper.viewes.adapters.MatchTeamListAdapter;
+import com.hf.goalkeeper.R;
+import com.hf.goalkeeper.viewes.adapters.ScorrerListAdapter;
+import com.hf.goalkeeper.core.GoalKeeperApp;
+import com.hf.goalkeeper.core.Mapper;
+import com.hf.goalkeeper.core.managers.PlayerManager;
+import com.hf.goalkeeper.core.managers.StatisticsManager;
+import com.hf.goalkeeper.core.managers.TimeManager;
+
 /**
  * Created by hanan on 17/02/17.
  */
 
-public class GamePlayActivity extends AppCompatActivity implements GameContract.ViewHandler{
+public class GamePlayActivity extends AppCompatActivity implements GameContract.ViewHandler {
     private static final String GAME_MINUTES = "game_minutes";
     private static final String GAME_SECONDS = "game_seconds";
     private static final String EXT_MINUTES = "ext_minutes";
@@ -31,8 +41,8 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     private RecyclerView mBlackTeamList;
     private RecyclerView mWhiteTeamList;
 
-    private TeamListAdapter mBlackAdapter;
-    private TeamListAdapter mWhiteAdapter;
+    private MatchTeamListAdapter mBlackAdapter;
+    private MatchTeamListAdapter mWhiteAdapter;
 
     private RecyclerView mWhiteTeamScorrers;
     private RecyclerView mBlackTeamScorrers;
@@ -61,7 +71,11 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
         setContentView(R.layout.activity_gameplay);
         mMapper = ((GoalKeeperApp)getApplication()).getMapper();
         setLayout();
-        mActionsListener = new TimeManager(this);
+        TimeManager timeManager = new TimeManager(this);
+        mActionsListener = timeManager;
+        StatisticsManager statisticsManager = (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class);
+        statisticsManager.setTimeManager(timeManager);
+        statisticsManager.resetMatchGoals();
     }
 
     @Override
@@ -73,16 +87,14 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
         int extSeconds = getIntent().getIntExtra(EXT_SECONDS, 0);
         mActionsListener.userStartedGame(gameMinutes, gameSeconds, extMinutes, extSeconds);
 
-        mBlackAdapter.displayMatchTeams();
-        mWhiteAdapter.displayMatchTeams();
     }
 
     private void setLayout() {
         mBlackTeamList = (RecyclerView) findViewById(R.id.blackTeamList);
         mWhiteTeamList = (RecyclerView) findViewById(R.id.whiteTeamList);
 
-        mBlackAdapter = new TeamListAdapter((PlayerManager) mMapper.getValueForKey(PlayerManager.class), PlayerManager.BLACK_TEAM);
-        mWhiteAdapter = new TeamListAdapter((PlayerManager) mMapper.getValueForKey(PlayerManager.class), PlayerManager.WHITE_TEAM);
+        mBlackAdapter = new MatchTeamListAdapter((PlayerManager) mMapper.getValueForKey(PlayerManager.class), PlayerManager.BLACK_TEAM, (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class));
+        mWhiteAdapter = new MatchTeamListAdapter((PlayerManager) mMapper.getValueForKey(PlayerManager.class), PlayerManager.WHITE_TEAM, (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class));
 
         mBlackTeamList.setAdapter(mBlackAdapter);
         mWhiteTeamList.setAdapter(mWhiteAdapter);
@@ -180,5 +192,11 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     @Override
     public void matchEnded() {
         finish();
+    }
+
+    @Override
+    public void goalScored(StatisticsManager.Goal goal) {
+        mBlackScorrersAdapter.notifyDataSetChanged();
+        mWhiteScorrersAdapter.notifyDataSetChanged();
     }
 }

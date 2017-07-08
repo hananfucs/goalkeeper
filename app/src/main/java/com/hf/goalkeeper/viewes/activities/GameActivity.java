@@ -1,4 +1,4 @@
-package com.hf.goalkeeper;
+package com.hf.goalkeeper.viewes.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,24 +9,33 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hf.goalkeeper.R;
+import com.hf.goalkeeper.core.utils.StringUtils;
+import com.hf.goalkeeper.viewes.adapters.TeamListAdapter;
+import com.hf.goalkeeper.core.GoalKeeperApp;
+import com.hf.goalkeeper.core.Mapper;
+import com.hf.goalkeeper.core.managers.PlayerManager;
+import com.hf.goalkeeper.core.managers.SettingsManager;
 
 /**
  * Created by hanan on 05/02/17.
  */
 
 public class GameActivity extends AppCompatActivity {
-    private EditText mGameMinTimeText;
-    private EditText mGameSecTimeText;
-    private EditText mExtMinTimeText;
-    private EditText mExtSecTimeText;
+    private TextView mGameMinTimeText;
+    private TextView mGameSecTimeText;
+    private TextView mExtMinTimeText;
+    private TextView mExtSecTimeText;
 
     private ConstraintLayout mEditTimeLayout;
     private ConstraintLayout mShowTimeLayout;
 
     private Button mStartButton;
+    private ImageButton mEditSettingsButton;
 
     private RecyclerView mBlackTeamList;
     private RecyclerView mWhiteTeamList;
@@ -35,7 +44,7 @@ public class GameActivity extends AppCompatActivity {
     private TeamListAdapter mWhiteAdapter;
     private Mapper mMapper;
     private PlayerManager mPlayerManager;
-    
+
     private Context mContext;
 
 
@@ -60,12 +69,17 @@ public class GameActivity extends AppCompatActivity {
         mEditTimeLayout = (ConstraintLayout)findViewById(R.id.editTimeLayout);
         mShowTimeLayout = (ConstraintLayout)findViewById(R.id.showTimeLayout);
 
-        mGameMinTimeText = (EditText) findViewById(R.id.gameTimeMinEditText);
-        mGameSecTimeText = (EditText) findViewById(R.id.gameTimeSecEditText);
-        mExtSecTimeText = (EditText) findViewById(R.id.extTimeSecEditText);
-        mExtMinTimeText = (EditText) findViewById(R.id.extTimeMinEditText);
+        mGameMinTimeText = (TextView) findViewById(R.id.gameTimeMinEditText);
+        mGameSecTimeText = (TextView) findViewById(R.id.gameTimeSecEditText);
+        mExtSecTimeText = (TextView) findViewById(R.id.extTimeSecEditText);
+        mExtMinTimeText = (TextView) findViewById(R.id.extTimeMinEditText);
+        SettingsManager settingsManager = (SettingsManager) mMapper.getValueForKey(SettingsManager.class);
+        mGameMinTimeText.setText(StringUtils.getFormatedNumber(settingsManager.getGameMinutes()));
+        mGameSecTimeText.setText(StringUtils.getFormatedNumber(settingsManager.getGameSeconds()));
+        mExtMinTimeText.setText(StringUtils.getFormatedNumber(settingsManager.getExtMinutes()));
+        mExtSecTimeText.setText(StringUtils.getFormatedNumber(settingsManager.getExtSeconds()));
 
-        mBlackTeamList = (RecyclerView) findViewById(R.id.blackTeamList);
+                mBlackTeamList = (RecyclerView) findViewById(R.id.blackTeamList);
         mWhiteTeamList = (RecyclerView) findViewById(R.id.whiteTeamList);
 
         mBlackAdapter = new TeamListAdapter((PlayerManager) mMapper.getValueForKey(PlayerManager.class), PlayerManager.BLACK_TEAM);
@@ -91,6 +105,14 @@ public class GameActivity extends AppCompatActivity {
                     return;
                 }
                 startMatch();
+            }
+        });
+        mEditSettingsButton = (ImageButton) findViewById(R.id.edit_settings_button);
+        mEditSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, GameSettingsActivity.class);
+                startActivity(intent);
             }
         });
     }
