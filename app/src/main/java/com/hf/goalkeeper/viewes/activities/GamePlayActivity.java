@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.hf.goalkeeper.core.utils.StringUtils;
 import com.hf.goalkeeper.viewes.support.GameContract;
 import com.hf.goalkeeper.viewes.adapters.MatchTeamListAdapter;
 import com.hf.goalkeeper.R;
@@ -85,7 +86,8 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
         int gameSeconds = getIntent().getIntExtra(GAME_SECONDS, 0);
         int extMinutes = getIntent().getIntExtra(EXT_MINUTES, 2);
         int extSeconds = getIntent().getIntExtra(EXT_SECONDS, 0);
-        mActionsListener.userStartedGame(gameMinutes, gameSeconds, extMinutes, extSeconds);
+        gameSeconds = gameSeconds + (60 * gameMinutes);
+        mActionsListener.userStartedGame(gameSeconds, extMinutes, extSeconds);
 
     }
 
@@ -148,24 +150,14 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     }
 
     @Override
-    public void updateMatchTime(int minutes, int seconds) {
-        String minutesString = String.valueOf(minutes);
-        final String minutesStringF;
-        if (minutesString.length() == 1) {
-            minutesString = "0"+minutesString;
-        }
-        minutesStringF = minutesString;
-        String secondsString = String.valueOf(seconds);
-        final String secondsStringF;
-        if (secondsString.length() == 1) {
-            secondsString = "0" + secondsString;
-        }
-        secondsStringF = secondsString;
+    public void updateMatchTime(int seconds) {
+        final String displayMinute = StringUtils.secondsToMinutes(seconds);
+        final String displaySeconds = StringUtils.secondsToSeconds(seconds);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mMatchTimeMin.setText(minutesStringF);
-                mMatchTimeSec.setText(secondsStringF);
+                mMatchTimeMin.setText(displayMinute);
+                mMatchTimeSec.setText(displaySeconds);
             }
         });
     }

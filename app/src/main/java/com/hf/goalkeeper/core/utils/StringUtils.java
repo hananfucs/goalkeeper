@@ -6,7 +6,6 @@ package com.hf.goalkeeper.core.utils;
 
 public class StringUtils {
     public static String getFormatedTime(int minutes, int seconds) {
-        String ret = "";
         String minutesString = getFormatedNumber(minutes);
         String secondsString = getFormatedNumber(seconds);
         return minutesString + ":" + secondsString;
@@ -20,5 +19,15 @@ public class StringUtils {
             ret = "0" + String.valueOf(number);
         }
         return ret;
+    }
+
+    public static String secondsToMinutes(int seconds) {
+        int rawMinutes = seconds / 60;
+        return getFormatedNumber(rawMinutes);
+    }
+
+    public static String secondsToSeconds(int seconds) {
+        int rawSeconds = seconds % 60;
+        return getFormatedNumber(rawSeconds);
     }
 }

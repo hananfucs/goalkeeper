@@ -25,8 +25,8 @@ public class StatisticsManager {
 
     public void goalScored(int team, PlayerManager.Player player) {
         Goal goal = new Goal();
-        goal.minute = mTimeManager.getCurrentMinute();
-        goal.second = mTimeManager.getCurrentSecond();
+        goal.second = mTimeManager.getCurrentSecond()%60;
+        goal.minute = mTimeManager.getCurrentSecond()/60;
         goal.isExtension = mTimeManager.isInExt();
         goal.scorrer = player;
 

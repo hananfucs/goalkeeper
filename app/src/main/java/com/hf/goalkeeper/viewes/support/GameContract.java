@@ -9,7 +9,7 @@ import com.hf.goalkeeper.core.managers.StatisticsManager;
 public interface GameContract {
 
     interface ViewHandler {
-        void updateMatchTime(int minutes, int seconds);
+        void updateMatchTime(int seconds);
         void updateExtTime(int minutes, int seconds);
 
         void matchStarted();
@@ -20,7 +20,7 @@ public interface GameContract {
     }
 
     interface UserActionsListener {
-        void userStartedGame(int gameMinutes, int gameSeconds, int extMinutes, int extSeconds);
+        void userStartedGame(int gameSeconds, int extMinutes, int extSeconds);
         void userPausedGame();
         void userResumedGame();
         void userStoppedGame();
