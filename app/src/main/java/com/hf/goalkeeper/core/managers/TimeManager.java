@@ -19,7 +19,7 @@ public class TimeManager implements GameContract.UserActionsListener {
     private int mExtSeconds;
 
     private GameContract.ViewHandler mViewHandler;
-    private int mGameState;
+    private int mGameState = GAME_NOT_STARTED;
     private TimerThread currentGameThread;
 
     @Override
@@ -33,16 +33,18 @@ public class TimeManager implements GameContract.UserActionsListener {
 
     @Override
     public void userStartedGame(int gameSeconds, int extMinutes, int extSeconds) {
-        mViewHandler.matchStarted();
-        mViewHandler.updateMatchTime(gameSeconds);
-
         mMatchSeconds= gameSeconds;
         mExtMinutes = extMinutes;
         mExtSeconds = extSeconds;
-
-        currentGameThread = new TimerThread(gameSeconds);
-        currentGameThread.start();
-        mGameState = GAME_ONGOING;
+        if (mGameState == GAME_NOT_STARTED) {
+            currentGameThread = new TimerThread(gameSeconds);
+            currentGameThread.start();
+            mGameState = GAME_ONGOING;
+            mViewHandler.matchStarted();
+            mViewHandler.updateMatchTime(gameSeconds);
+        } else {
+            mViewHandler.updateMatchTime(mMatchSeconds - currentGameThread.getSecond());
+        }
     }
 
     @Override
