@@ -34,6 +34,9 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     private TextView mMatchTimeMin;
     private TextView mMatchTimeSec;
 
+    private TextView mBlackScore;
+    private TextView mWhiteScore;
+
     private Button mResumeButton;
     private Button mStopButton;
     private Button mPauseButton;
@@ -148,6 +151,9 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
                 mActionsListener.userPausedGame();
             }
         });
+
+        mBlackScore = (TextView)findViewById(R.id.leftTeamScore);
+        mWhiteScore = (TextView)findViewById(R.id.rightTeamScore);
     }
 
     @Override
@@ -191,5 +197,14 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     public void goalScored(StatisticsManager.Goal goal) {
         mBlackScorrersAdapter.notifyDataSetChanged();
         mWhiteScorrersAdapter.notifyDataSetChanged();
+        updateScore();
+    }
+
+    private void updateScore() {
+        StatisticsManager stats = (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class);
+        int blackScore = stats.getBlackGoals().size();
+        int whiteScore = stats.getWhiteGoals().size();
+        mBlackScore.setText(String.valueOf(blackScore));
+        mWhiteScore.setText(String.valueOf(whiteScore));
     }
 }

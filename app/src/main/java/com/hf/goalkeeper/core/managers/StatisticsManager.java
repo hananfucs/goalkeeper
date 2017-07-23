@@ -42,6 +42,7 @@ public class StatisticsManager {
             currentWhiteGoals.remove(position);
         if (team == PlayerManager.BLACK_TEAM)
             currentBlackGoals.remove(position);
+        mTimeManager.goalScored(null);
 
     }
 
