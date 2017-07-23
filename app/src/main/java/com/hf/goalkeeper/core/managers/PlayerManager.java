@@ -17,6 +17,10 @@ public class PlayerManager {
         return mBlackTeam.size() == mWhiteTeam.size();
     }
 
+    public boolean areTeamsEmpty() {
+        return mBlackTeam.size() == 0 && mWhiteTeam.size() == 0;
+    }
+
     public void addPlayerToTeam(Player player, int team) {
         if (team == BLACK_TEAM) {
             mBlackTeam.add(player);

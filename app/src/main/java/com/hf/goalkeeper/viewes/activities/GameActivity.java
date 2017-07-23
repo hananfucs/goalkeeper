@@ -100,7 +100,7 @@ public class GameActivity extends AppCompatActivity {
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mPlayerManager.areTeamsEqual()) {
+                if (!mPlayerManager.areTeamsEqual() || mPlayerManager.areTeamsEmpty()) {
                     Toast.makeText(mContext, "Teams are not equal, can't start game", Toast.LENGTH_SHORT).show();
                     return;
                 }
