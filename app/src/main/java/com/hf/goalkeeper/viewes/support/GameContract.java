@@ -20,7 +20,7 @@ public interface GameContract {
     }
 
     interface UserActionsListener {
-        void userStartedGame(int gameSeconds, int extMinutes, int extSeconds);
+        void userStartedGame(int gameSeconds, int extSeconds);
         void userPausedGame();
         void userResumedGame();
         void userStoppedGame();

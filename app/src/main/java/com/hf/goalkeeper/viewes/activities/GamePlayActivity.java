@@ -87,7 +87,8 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
         int extMinutes = getIntent().getIntExtra(EXT_MINUTES, 2);
         int extSeconds = getIntent().getIntExtra(EXT_SECONDS, 0);
         gameSeconds = gameSeconds + (60 * gameMinutes);
-        mActionsListener.userStartedGame(gameSeconds, extMinutes, extSeconds);
+        extSeconds = extSeconds + (60 * extMinutes);
+        mActionsListener.userStartedGame(gameSeconds, extSeconds);
 
     }
 

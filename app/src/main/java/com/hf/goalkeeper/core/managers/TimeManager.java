@@ -1,7 +1,5 @@
 package com.hf.goalkeeper.core.managers;
 
-import android.util.Log;
-
 import com.hf.goalkeeper.viewes.support.GameContract;
 
 /**
@@ -32,12 +30,12 @@ public class TimeManager implements GameContract.UserActionsListener {
     }
 
     @Override
-    public void userStartedGame(int gameSeconds, int extMinutes, int extSeconds) {
+    public void userStartedGame(int gameSeconds, int extSeconds) {
         mMatchSeconds= gameSeconds;
-        mExtMinutes = extMinutes;
         mExtSeconds = extSeconds;
         if (mGameState == GAME_NOT_STARTED) {
             currentGameThread = new TimerThread(gameSeconds);
+            currentGameThread = new TimerThread(gameSeconds, extSeconds);
             currentGameThread.start();
             mGameState = GAME_ONGOING;
             mViewHandler.matchStarted();
@@ -85,19 +83,34 @@ public class TimeManager implements GameContract.UserActionsListener {
     }
 
     private class TimerThread extends Thread{
-        private int mSeconds;
-        private int mInitialTime;
+        private int mMatchSeconds;
+        private int mMatchInitialTime;
+
+        private int mExtSeconds;
+        private int mExtInitialTime;
+
         private boolean mPause;
         private boolean mOngoing;
 
         public TimerThread(int seconds) {
-            mSeconds = seconds;
-            mInitialTime = seconds;
+            mMatchSeconds = seconds;
+            mMatchInitialTime = seconds;
+            mOngoing = true;
+        }
+
+        public TimerThread(int matchSeconds, int extSeconds) {
+            mMatchSeconds = matchSeconds;
+            mMatchInitialTime = matchSeconds;
+            mExtSeconds = extSeconds;
+            mExtInitialTime = extSeconds;
             mOngoing = true;
         }
 
         public int getSecond() {
-            return mInitialTime - mSeconds;
+            if (mGameState == GAME_IN_EXTENSION)
+                return mMatchInitialTime + mExtInitialTime - mMatchSeconds;
+            else
+                return mMatchInitialTime - mMatchSeconds;
         }
 
         public void pauseTime() {
@@ -129,14 +142,23 @@ public class TimeManager implements GameContract.UserActionsListener {
                     }
                 }
 
-                mSeconds = mSeconds - 1;
+                mMatchSeconds = mMatchSeconds - 1;
 
-                if (mSeconds == 0) {
-                    mViewHandler.updateMatchTime(mSeconds);
-                    return;
+                if (mMatchSeconds == 0) {
+                    mViewHandler.updateMatchTime(mMatchSeconds);
+                    if (mExtSeconds != 0) {
+                        mGameState = GAME_IN_EXTENSION;
+                        mMatchSeconds = mExtInitialTime;
+                        mExtSeconds = 0;
+                    }
+                    else {
+                        //finish game
+                        return;
+                    }
+                    continue;
                 }
 
-                mViewHandler.updateMatchTime(mSeconds);
+                mViewHandler.updateMatchTime(mMatchSeconds);
             }
         }
     }
