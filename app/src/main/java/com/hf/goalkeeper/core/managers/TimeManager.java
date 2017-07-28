@@ -13,8 +13,7 @@ public class TimeManager implements GameContract.UserActionsListener {
     public static final int GAME_PAUSED= 3;
 
     private int mMatchSeconds;
-    private int mExtMinutes;
-    private int mExtSeconds;
+    private int mMatchGoals;
 
     private GameContract.ViewHandler mViewHandler;
     private int mGameState = GAME_NOT_STARTED;
@@ -30,9 +29,9 @@ public class TimeManager implements GameContract.UserActionsListener {
     }
 
     @Override
-    public void userStartedGame(int gameSeconds, int extSeconds) {
+    public void userStartedGame(int gameSeconds, int extSeconds, int matchGoals) {
         mMatchSeconds= gameSeconds;
-        mExtSeconds = extSeconds;
+        mMatchGoals = matchGoals;
         if (mGameState == GAME_NOT_STARTED) {
             currentGameThread = new TimerThread(gameSeconds);
             currentGameThread = new TimerThread(gameSeconds, extSeconds);
@@ -78,8 +77,11 @@ public class TimeManager implements GameContract.UserActionsListener {
         return false;
     }
 
-    public void goalScored(StatisticsManager.Goal goal) {
+    public void goalScored(StatisticsManager.Goal goal, int maxNumOfGoals) {
         mViewHandler.goalScored(goal);
+        if (maxNumOfGoals == mMatchGoals || mGameState == GAME_IN_EXTENSION) {
+            userStoppedGame();
+        }
     }
 
     private class TimerThread extends Thread{
@@ -146,6 +148,8 @@ public class TimeManager implements GameContract.UserActionsListener {
 
                 if (mMatchSeconds == 0) {
                     mViewHandler.updateMatchTime(mMatchSeconds);
+                    if (!mViewHandler.shouldGoTOExtension())
+                        userStoppedGame();
                     if (mExtSeconds != 0) {
                         mGameState = GAME_IN_EXTENSION;
                         mMatchSeconds = mExtInitialTime;
@@ -155,6 +159,7 @@ public class TimeManager implements GameContract.UserActionsListener {
                         //finish game
                         return;
                     }
+                    mViewHandler.startedExtension();
                     continue;
                 }
 

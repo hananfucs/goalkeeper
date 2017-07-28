@@ -15,12 +15,7 @@ public class SettingsManager {
     private static final String SHARED_PREFS_EXT_SECONDS = "ext_seconds";
     private static final String SHARED_PREFS_GOALS = "goals";
 
-
-
     private Context mContext;
-
-
-
 
     private int gameMinutes;
     private int gameSeconds;

@@ -8,8 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hf.goalkeeper.core.managers.SettingsManager;
 import com.hf.goalkeeper.core.utils.StringUtils;
 import com.hf.goalkeeper.viewes.support.GameContract;
 import com.hf.goalkeeper.viewes.adapters.MatchTeamListAdapter;
@@ -26,10 +28,6 @@ import com.hf.goalkeeper.core.managers.TimeManager;
  */
 
 public class GamePlayActivity extends AppCompatActivity implements GameContract.ViewHandler {
-    private static final String GAME_MINUTES = "game_minutes";
-    private static final String GAME_SECONDS = "game_seconds";
-    private static final String EXT_MINUTES = "ext_minutes";
-    private static final String EXT_SECONDS= "ext_seconds";
 
     private TextView mMatchTimeMin;
     private TextView mMatchTimeSec;
@@ -57,13 +55,8 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     private Mapper mMapper;
     private GameContract.UserActionsListener mActionsListener;
 
-    public static Intent getIntent(Context context, int gameMinutes, int gameSeconds, int extMinutes, int extSeconds) {
+    public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, GamePlayActivity.class);
-
-        intent.putExtra(GAME_MINUTES, gameMinutes);
-        intent.putExtra(GAME_SECONDS, gameSeconds);
-        intent.putExtra(EXT_MINUTES, extMinutes);
-        intent.putExtra(EXT_SECONDS, extSeconds);
 
         return intent;
 
@@ -85,13 +78,14 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     @Override
     public void onResume() {
         super.onResume();
-        int gameMinutes = getIntent().getIntExtra(GAME_MINUTES, 8);
-        int gameSeconds = getIntent().getIntExtra(GAME_SECONDS, 0);
-        int extMinutes = getIntent().getIntExtra(EXT_MINUTES, 2);
-        int extSeconds = getIntent().getIntExtra(EXT_SECONDS, 0);
+        SettingsManager settingsManager = (SettingsManager) mMapper.getValueForKey(SettingsManager.class);
+        int gameMinutes = settingsManager.getGameMinutes();
+        int gameSeconds = settingsManager.getGameSeconds();
+        int extMinutes = settingsManager.getExtMinutes();
+        int extSeconds = settingsManager.getExtSeconds();
         gameSeconds = gameSeconds + (60 * gameMinutes);
         extSeconds = extSeconds + (60 * extMinutes);
-        mActionsListener.userStartedGame(gameSeconds, extSeconds);
+        mActionsListener.userStartedGame(gameSeconds, extSeconds, settingsManager.getGameGoals());
 
     }
 
@@ -170,11 +164,6 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     }
 
     @Override
-    public void updateExtTime(int minutes, int seconds) {
-
-    }
-
-    @Override
     public void matchStarted() {
         mResumeButton.setVisibility(View.GONE);
         mStopButton.setVisibility(View.GONE);
@@ -194,10 +183,27 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     }
 
     @Override
+    public void startedExtension() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ImageView extension = (ImageView)findViewById(R.id.extensionIndicator);
+                extension.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    @Override
     public void goalScored(StatisticsManager.Goal goal) {
         mBlackScorrersAdapter.notifyDataSetChanged();
         mWhiteScorrersAdapter.notifyDataSetChanged();
         updateScore();
+    }
+
+    @Override
+    public boolean shouldGoTOExtension() {
+        StatisticsManager stats = (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class);
+        return stats.getBlackGoals().size() == stats.getWhiteGoals().size();
     }
 
     private void updateScore() {

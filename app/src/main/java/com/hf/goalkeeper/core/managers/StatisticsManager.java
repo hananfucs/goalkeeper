@@ -34,7 +34,8 @@ public class StatisticsManager {
             currentBlackGoals.add(goal);
         else if (team == PlayerManager.WHITE_TEAM)
             currentWhiteGoals.add(goal);
-        mTimeManager.goalScored(goal);
+        int maxNumOfGoals = Math.max(currentBlackGoals.size(), currentWhiteGoals.size());
+        mTimeManager.goalScored(goal, maxNumOfGoals);
     }
 
     public void cancelGoal(int position, int team) {
@@ -42,7 +43,8 @@ public class StatisticsManager {
             currentWhiteGoals.remove(position);
         if (team == PlayerManager.BLACK_TEAM)
             currentBlackGoals.remove(position);
-        mTimeManager.goalScored(null);
+        int maxNumOfGoals = Math.max(currentBlackGoals.size(), currentWhiteGoals.size());
+        mTimeManager.goalScored(null, maxNumOfGoals);
 
     }
 

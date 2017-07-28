@@ -118,12 +118,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void startMatch() {
-        int gameMinutes = Integer.valueOf(mGameMinTimeText.getText().toString());
-        int gameSeconds= Integer.valueOf(mGameSecTimeText.getText().toString());
-        int extMinutes = Integer.valueOf(mExtMinTimeText.getText().toString());
-        int extSeconds = Integer.valueOf(mExtSecTimeText.getText().toString());
-
-        Intent gamePlayIntent = GamePlayActivity.getIntent(this, gameMinutes, gameSeconds, extMinutes, extSeconds);
+        Intent gamePlayIntent = GamePlayActivity.getIntent(this);
         startActivity(gamePlayIntent);
     }
 }

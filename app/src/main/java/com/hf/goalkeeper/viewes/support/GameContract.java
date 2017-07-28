@@ -10,17 +10,18 @@ public interface GameContract {
 
     interface ViewHandler {
         void updateMatchTime(int seconds);
-        void updateExtTime(int minutes, int seconds);
 
         void matchStarted();
         void matchPaused();
         void matchEnded();
+        void startedExtension();
 
         void goalScored(StatisticsManager.Goal goal);
+        boolean shouldGoTOExtension();
     }
 
     interface UserActionsListener {
-        void userStartedGame(int gameSeconds, int extSeconds);
+        void userStartedGame(int gameSeconds, int extSeconds, int matchGoals);
         void userPausedGame();
         void userResumedGame();
         void userStoppedGame();
