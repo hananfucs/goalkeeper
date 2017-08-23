@@ -81,8 +81,8 @@ public class GameSummaryActivity extends AppCompatActivity {
         StatisticsManager stats = (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class);
         StatisticsManager.Match match = stats.getCurrentMatch();
 
-        mBlackAdapter= new ScorrerListAdapter(new MatchStats(match), PlayerManager.BLACK_TEAM);
-        mWhiteAdapter = new ScorrerListAdapter(new MatchStats(match), PlayerManager.WHITE_TEAM);
+        mBlackAdapter= new ScorrerListAdapter(new MatchStats(match), PlayerManager.BLACK_TEAM, true);
+        mWhiteAdapter = new ScorrerListAdapter(new MatchStats(match), PlayerManager.WHITE_TEAM, true);
 
         mBlackTeamList = (RecyclerView)findViewById(R.id.blackTeamListSummary);
         mBlackTeamList.setAdapter(mBlackAdapter);

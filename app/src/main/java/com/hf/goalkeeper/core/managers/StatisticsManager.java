@@ -37,7 +37,7 @@ public class StatisticsManager implements GameStatsHolder{
             currentBlackGoals.add(goal);
         else if (team == PlayerManager.WHITE_TEAM)
             currentWhiteGoals.add(goal);
-        mCurrentMatch.goals.add(goal);
+//        mCurrentMatch.goals.add(goal);
         int maxNumOfGoals = Math.max(currentBlackGoals.size(), currentWhiteGoals.size());
         mTimeManager.goalScored(goal, maxNumOfGoals);
     }
@@ -78,6 +78,9 @@ public class StatisticsManager implements GameStatsHolder{
     public void matchEndded() {
         mCurrentMatch.winner = getWinner();
         mCurrentMatch.matchLength = mTimeManager.getCurrentSecond();
+        mCurrentMatch.goals.addAll(currentBlackGoals);
+        mCurrentMatch.goals.addAll(currentWhiteGoals);
+
         //save Match
 
     }

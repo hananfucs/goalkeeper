@@ -18,15 +18,21 @@ import com.hf.goalkeeper.core.managers.StatisticsManager;
 public class ScorrerListAdapter extends RecyclerView.Adapter<ScorrerListAdapter.ViewHolder> {
     private GameStatsHolder mStatsManager;
     private int mTeam;
+    private boolean mIsSummary;
 
-    public ScorrerListAdapter(GameStatsHolder statsManager, int team) {
+    public ScorrerListAdapter(GameStatsHolder statsManager, int team, boolean isSummary) {
         mTeam = team;
         mStatsManager = statsManager;
+        mIsSummary = isSummary;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.scorrer_list_row, parent, false);
+        if (mIsSummary) {
+            ImageView x = (ImageView) v.findViewById(R.id.cancel_goal);
+            x.setVisibility(View.GONE);
+        }
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }

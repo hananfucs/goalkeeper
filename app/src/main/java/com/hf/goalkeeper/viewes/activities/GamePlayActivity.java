@@ -109,8 +109,8 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
         mBlackTeamScorrers = (RecyclerView) findViewById(R.id.blackScorrers);
         mWhiteTeamScorrers = (RecyclerView) findViewById(R.id.whiteScorrers);
 
-        mBlackScorrersAdapter = new ScorrerListAdapter((StatisticsManager) mMapper.getValueForKey(StatisticsManager.class), PlayerManager.BLACK_TEAM);
-        mWhiteScorrersAdapter = new ScorrerListAdapter((StatisticsManager) mMapper.getValueForKey(StatisticsManager.class), PlayerManager.WHITE_TEAM);
+        mBlackScorrersAdapter = new ScorrerListAdapter((StatisticsManager) mMapper.getValueForKey(StatisticsManager.class), PlayerManager.BLACK_TEAM, false);
+        mWhiteScorrersAdapter = new ScorrerListAdapter((StatisticsManager) mMapper.getValueForKey(StatisticsManager.class), PlayerManager.WHITE_TEAM, false);
 
         mBlackTeamScorrers.setAdapter(mBlackScorrersAdapter);
         mWhiteTeamScorrers.setAdapter(mWhiteScorrersAdapter);
