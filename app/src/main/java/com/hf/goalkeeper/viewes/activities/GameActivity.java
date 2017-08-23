@@ -79,8 +79,8 @@ public class GameActivity extends AppCompatActivity {
         mExtMinTimeText.setText(StringUtils.getFormatedNumber(settingsManager.getExtMinutes()));
         mExtSecTimeText.setText(StringUtils.getFormatedNumber(settingsManager.getExtSeconds()));
 
-                mBlackTeamList = (RecyclerView) findViewById(R.id.blackTeamList);
-        mWhiteTeamList = (RecyclerView) findViewById(R.id.whiteTeamList);
+                mBlackTeamList = (RecyclerView) findViewById(R.id.blackTeamListSummary);
+        mWhiteTeamList = (RecyclerView) findViewById(R.id.whiteTeamListSumary);
 
         mBlackAdapter = new TeamListAdapter((PlayerManager) mMapper.getValueForKey(PlayerManager.class), PlayerManager.BLACK_TEAM);
         mWhiteAdapter = new TeamListAdapter((PlayerManager) mMapper.getValueForKey(PlayerManager.class), PlayerManager.WHITE_TEAM);

@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/guideline"
-        android:id="@+id/blackTeamList"
+        android:id="@+id/blackTeamListSummary"
         android:layout_marginTop="40dp"
         app:layout_constraintHorizontal_bias="0.58" />
 
@@ -177,7 +177,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="@+id/guideline"
         android:layout_width="175dp"
-        android:id="@+id/whiteTeamList"
+        android:id="@+id/whiteTeamListSumary"
         android:layout_marginTop="40dp"
         app:layout_constraintHorizontal_bias="0.66" />
 

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hf.goalkeeper.R;
+import com.hf.goalkeeper.core.managers.GameStatsHolder;
 import com.hf.goalkeeper.core.managers.StatisticsManager;
 
 /**
@@ -15,10 +16,10 @@ import com.hf.goalkeeper.core.managers.StatisticsManager;
  */
 
 public class ScorrerListAdapter extends RecyclerView.Adapter<ScorrerListAdapter.ViewHolder> {
-    private StatisticsManager mStatsManager;
+    private GameStatsHolder mStatsManager;
     private int mTeam;
 
-    public ScorrerListAdapter(StatisticsManager statsManager, int team) {
+    public ScorrerListAdapter(GameStatsHolder statsManager, int team) {
         mTeam = team;
         mStatsManager = statsManager;
     }

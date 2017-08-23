@@ -22,6 +22,7 @@
         </activity>
 
         <activity android:name=".viewes.activities.GamePlayActivity"/>
+        <activity android:name=".viewes.activities.GameSummaryActivity"/>
         <activity android:name=".viewes.activities.GameSettingsActivity" android:exported="true"/>
 
     </application>

@@ -1,15 +1,18 @@
 package com.hf.goalkeeper.core.managers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by hanan on 15/02/17.
  */
 
-public class StatisticsManager {
+public class StatisticsManager implements GameStatsHolder{
     private ArrayList<Goal> currentWhiteGoals = new ArrayList<>();
     private ArrayList<Goal> currentBlackGoals = new ArrayList<>();
     private TimeManager mTimeManager;
+    private Match mCurrentMatch;
 
     public void setTimeManager(TimeManager timeManager) {
         mTimeManager = timeManager;
@@ -34,10 +37,12 @@ public class StatisticsManager {
             currentBlackGoals.add(goal);
         else if (team == PlayerManager.WHITE_TEAM)
             currentWhiteGoals.add(goal);
+        mCurrentMatch.goals.add(goal);
         int maxNumOfGoals = Math.max(currentBlackGoals.size(), currentWhiteGoals.size());
         mTimeManager.goalScored(goal, maxNumOfGoals);
     }
 
+    @Override
     public void cancelGoal(int position, int team) {
         if (team == PlayerManager.WHITE_TEAM)
             currentWhiteGoals.remove(position);
@@ -48,6 +53,7 @@ public class StatisticsManager {
 
     }
 
+    @Override
     public ArrayList<Goal> getGoals(int mTeam) {
         if (mTeam == PlayerManager.BLACK_TEAM)
             return currentBlackGoals;
@@ -55,9 +61,33 @@ public class StatisticsManager {
             return currentWhiteGoals;
     }
 
-    public void resetMatchGoals() {
+    private void resetMatchGoals() {
         currentWhiteGoals.clear();
         currentBlackGoals.clear();
+    }
+
+    public void matchStarted(ArrayList<PlayerManager.Player> blackTeam, ArrayList<PlayerManager.Player> whiteTeam) {
+        resetMatchGoals();
+        mCurrentMatch = new Match();
+        mCurrentMatch.blackTeam = blackTeam;
+        mCurrentMatch.whiteTeam = whiteTeam;
+        mCurrentMatch.goals = new ArrayList<>();
+        mCurrentMatch.matchDate = new Date(System.currentTimeMillis());
+    }
+
+    public void matchEndded() {
+        mCurrentMatch.winner = getWinner();
+        mCurrentMatch.matchLength = mTimeManager.getCurrentSecond();
+        //save Match
+
+    }
+
+    private int getWinner() {
+        return currentWhiteGoals.size() > currentBlackGoals.size() ? PlayerManager.WHITE_TEAM : PlayerManager.BLACK_TEAM;
+    }
+
+    public Match getCurrentMatch() {
+        return mCurrentMatch;
     }
 
     public static class Goal {
@@ -67,10 +97,12 @@ public class StatisticsManager {
         public boolean isExtension;
     }
 
-    public class Match {
-        public int matchSeconds;
-        public int matchMinutes;
+    public class Match implements Serializable{
+        public ArrayList<PlayerManager.Player> blackTeam;
+        public ArrayList<PlayerManager.Player> whiteTeam;
         public ArrayList<Goal> goals;
         public int winner;
+        public Date matchDate;
+        public int matchLength;
     }
 }

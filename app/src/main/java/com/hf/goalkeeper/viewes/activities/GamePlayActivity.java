@@ -72,7 +72,8 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
         mActionsListener = timeManager;
         StatisticsManager statisticsManager = (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class);
         statisticsManager.setTimeManager(timeManager);
-        statisticsManager.resetMatchGoals();
+        PlayerManager playerManager = (PlayerManager) mMapper.getValueForKey(PlayerManager.class);
+        statisticsManager.matchStarted(playerManager.getTeam(PlayerManager.BLACK_TEAM), playerManager.getTeam(PlayerManager.WHITE_TEAM));
     }
 
     @Override
@@ -90,8 +91,8 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
     }
 
     private void setLayout() {
-        mBlackTeamList = (RecyclerView) findViewById(R.id.blackTeamList);
-        mWhiteTeamList = (RecyclerView) findViewById(R.id.whiteTeamList);
+        mBlackTeamList = (RecyclerView) findViewById(R.id.blackTeamListSummary);
+        mWhiteTeamList = (RecyclerView) findViewById(R.id.whiteTeamListSumary);
 
         mBlackAdapter = new MatchTeamListAdapter((PlayerManager) mMapper.getValueForKey(PlayerManager.class), PlayerManager.BLACK_TEAM, (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class));
         mWhiteAdapter = new MatchTeamListAdapter((PlayerManager) mMapper.getValueForKey(PlayerManager.class), PlayerManager.WHITE_TEAM, (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class));
@@ -179,6 +180,10 @@ public class GamePlayActivity extends AppCompatActivity implements GameContract.
 
     @Override
     public void matchEnded() {
+        StatisticsManager stats = (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class);
+        stats.matchEndded();
+        Intent intent = new Intent(this, GameSummaryActivity.class);
+        startActivity(intent);
         finish();
     }
 

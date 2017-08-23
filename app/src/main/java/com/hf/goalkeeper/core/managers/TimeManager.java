@@ -2,6 +2,8 @@ package com.hf.goalkeeper.core.managers;
 
 import com.hf.goalkeeper.viewes.support.GameContract;
 
+import java.util.Date;
+
 /**
  * Created by hanan on 11/02/17.
  */
@@ -14,6 +16,9 @@ public class TimeManager implements GameContract.UserActionsListener {
 
     private int mMatchSeconds;
     private int mMatchGoals;
+    private int mCurrentTime;
+
+    private Date mMatchDate;
 
     private GameContract.ViewHandler mViewHandler;
     private int mGameState = GAME_NOT_STARTED;
@@ -39,6 +44,7 @@ public class TimeManager implements GameContract.UserActionsListener {
             mGameState = GAME_ONGOING;
             mViewHandler.matchStarted();
             mViewHandler.updateMatchTime(gameSeconds);
+            mMatchDate = new Date(System.currentTimeMillis());
         } else {
             mViewHandler.updateMatchTime(mMatchSeconds - currentGameThread.getSecond());
         }
@@ -70,7 +76,7 @@ public class TimeManager implements GameContract.UserActionsListener {
     }
 
     public int getCurrentSecond() {
-        return currentGameThread.getSecond();
+        return mCurrentTime;
     }
 
     public boolean isInExt() {
@@ -162,7 +168,7 @@ public class TimeManager implements GameContract.UserActionsListener {
                     mViewHandler.startedExtension();
                     continue;
                 }
-
+                mCurrentTime = getSecond();
                 mViewHandler.updateMatchTime(mMatchSeconds);
             }
         }
