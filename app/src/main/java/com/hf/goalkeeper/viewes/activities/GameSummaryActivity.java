@@ -1,11 +1,15 @@
 package com.hf.goalkeeper.viewes.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ContentFrameLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +24,7 @@ import com.hf.goalkeeper.viewes.adapters.ScorrerListAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by hanan on 28/07/17.
@@ -34,6 +39,9 @@ public class GameSummaryActivity extends AppCompatActivity {
     private TextView mMatchLength;
     private RecyclerView mBlackTeamList;
     private RecyclerView mWhiteTeamList;
+
+    private Button saveButton;
+    private Button ignoreButton;
 
     private ScorrerListAdapter mBlackAdapter;
     private ScorrerListAdapter mWhiteAdapter;
@@ -78,6 +86,11 @@ public class GameSummaryActivity extends AppCompatActivity {
         mMatchScore = (TextView)findViewById(R.id.matchScore);
         mMatchLength = (TextView)findViewById(R.id.matchLength);
 
+        saveButton = (Button) findViewById(R.id.saveButton);
+
+        ignoreButton = (Button) findViewById(R.id.ignoreButton);
+        ignoreButton .setOnClickListener(getIgnoreClickListener());
+
         StatisticsManager stats = (StatisticsManager) mMapper.getValueForKey(StatisticsManager.class);
         StatisticsManager.Match match = stats.getCurrentMatch();
 
@@ -94,7 +107,7 @@ public class GameSummaryActivity extends AppCompatActivity {
         mBlackTeamList.setLayoutManager(blackLayoutManager );
         mWhiteTeamList.setLayoutManager(whiteLayoutManager);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("DD.MM.YYYY | HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("DD.MM.YYYY | HH:mm", Locale.getDefault());
         String dateString = sdf.format(match.matchDate);
         mMatchDate.setText(dateString);
 
@@ -106,6 +119,34 @@ public class GameSummaryActivity extends AppCompatActivity {
 
         String matchLength = StringUtils.secondsToMinutes(match.matchLength) + ":" + StringUtils.secondsToSeconds(match.matchLength);
         mMatchLength.setText(matchLength);
+    }
+
+    private View.OnClickListener getIgnoreClickListener() {
+        final AppCompatActivity context = this;
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+
+                alertDialog.setMessage("Are you sure you want to forget about this game?");
+
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), "Game Deleted", Toast.LENGTH_SHORT).show();
+                        context.finish();
+                    }
+                });
+
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                // Showing Alert Message
+                alertDialog.show();
+            }
+        };
     }
 
     public class MatchStats implements GameStatsHolder {

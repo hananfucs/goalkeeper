@@ -45,7 +45,7 @@ public class ScorrerListAdapter extends RecyclerView.Adapter<ScorrerListAdapter.
     }
 
     private String getGoalTest(StatisticsManager.Goal goal) {
-        String goalMinute = String.valueOf(goal.minute);
+        String goalMinute = String.valueOf((int)(goal.second / 60));
         if (goalMinute.length() == 1)
             goalMinute = "0" + goalMinute;
 

@@ -3,6 +3,7 @@ package com.hf.goalkeeper.core.managers;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by hanan on 15/02/17.
@@ -28,8 +29,7 @@ public class StatisticsManager implements GameStatsHolder{
 
     public void goalScored(int team, PlayerManager.Player player) {
         Goal goal = new Goal();
-        goal.second = mTimeManager.getCurrentSecond()%60;
-        goal.minute = mTimeManager.getCurrentSecond()/60;
+        goal.second = mTimeManager.getCurrentSecond();
         goal.isExtension = mTimeManager.isInExt();
         goal.scorrer = player;
 
@@ -68,7 +68,7 @@ public class StatisticsManager implements GameStatsHolder{
 
     public void matchStarted(ArrayList<PlayerManager.Player> blackTeam, ArrayList<PlayerManager.Player> whiteTeam) {
         resetMatchGoals();
-        mCurrentMatch = new Match();
+        mCurrentMatch = new Match(UUID.randomUUID());
         mCurrentMatch.blackTeam = blackTeam;
         mCurrentMatch.whiteTeam = whiteTeam;
         mCurrentMatch.goals = new ArrayList<>();
@@ -100,12 +100,20 @@ public class StatisticsManager implements GameStatsHolder{
         public boolean isExtension;
     }
 
-    public class Match implements Serializable{
+    public static class Match implements Serializable{
         public ArrayList<PlayerManager.Player> blackTeam;
         public ArrayList<PlayerManager.Player> whiteTeam;
         public ArrayList<Goal> goals;
         public int winner;
         public Date matchDate;
         public int matchLength;
+        public String id;
+
+        public Match(UUID uuid) {
+            id = uuid.toString();
+        }
+
+        public Match(){
+        }
     }
 }
